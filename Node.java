@@ -8,9 +8,11 @@ public class Node extends JButton implements ActionListener{
     Node parent;
     int col;
     int row;
-    int gCost;
-    int hCost;
-    int fCost;
+    float gCost;
+    float hCost;
+    float fCost;
+    float stepCost; // Depending on terrain type
+    TerrainType terrainType; 
     boolean start;
     boolean goal;
     boolean solid;
@@ -20,7 +22,20 @@ public class Node extends JButton implements ActionListener{
     public Node(int col, int row){
         this.col = col;
         this.row = row;
-        
+        this.terrainType = TerrainType.NORMAL; // Default terrain
+        this.stepCost = terrainType.getCost(); // Get cost from terrain type
+        setBackground(terrainType.getColor());
+        setForeground(Color.black);
+        setFocusable(false); // Prevent nodes from stealing focus
+        addActionListener(this);
+    }
+
+    // Overloaded constructor to set custom step cost
+    public Node(int col, int row, int stepCost){
+        this.col = col;
+        this.row = row;
+        this.stepCost = stepCost;
+        this.terrainType = TerrainType.NORMAL; // Default, will be overridden if needed
         setBackground(Color.white);
         setForeground(Color.black);
         setFocusable(false); // Prevent nodes from stealing focus
@@ -42,6 +57,8 @@ public class Node extends JButton implements ActionListener{
     public void setAsSolid(){
         setBackground(Color.gray);
         solid = true;
+        terrainType = TerrainType.SOLID;
+        stepCost = terrainType.getCost();
     }
     public void setAsOpen(){
         setBackground(Color.orange);
@@ -58,6 +75,35 @@ public class Node extends JButton implements ActionListener{
         setBackground(Color.green);
         setForeground(Color.black);
     }
+    public void setStepCost(int cost){
+        this.stepCost = cost;
+    }
+    public float getStepCost(){
+        return this.stepCost;
+    }
+    
+    public void setTerrainType(TerrainType type) {
+        this.terrainType = type;
+        this.stepCost = type.getCost();
+        if (!start && !goal) {
+            setBackground(type.getColor());
+        }
+        // Update solid status based on terrain
+        this.solid = !type.isPassable();
+    }
+    
+    public TerrainType getTerrainType() {
+        return this.terrainType;
+    }
+    
+    public void resetToNormal() {
+        if (!start && !goal) {
+            setTerrainType(TerrainType.NORMAL);
+            open = false;
+            checked = false;
+        }
+    }   
+
 
     @Override
     public void actionPerformed(ActionEvent e) {

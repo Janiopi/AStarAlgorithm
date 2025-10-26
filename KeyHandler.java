@@ -13,13 +13,13 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER){
             dp.reset(); // Reset before search to ensure fair timing
             long start = System.nanoTime();
-            dp.parallelAutoSearch();
+            dp.autoSearch();
             long end = System.nanoTime();
             double timeMs = (end - start) / 1_000_000.0;
-            System.out.println("Parallel search took: " + String.format("%.2f", timeMs) + " ms");
+            System.out.println("Search took: " + String.format("%.2f", timeMs) + " ms");
         }
          if(code == KeyEvent.VK_SPACE){
-            dp.parallelSearch();
+            dp.search();
         }
         if( code == KeyEvent.VK_R){
             dp.reset();
@@ -29,6 +29,15 @@ public class KeyHandler implements KeyListener {
         }
         if ( code == KeyEvent.VK_C){
             dp.clearMaze();
+        }
+        if ( code == KeyEvent.VK_T){
+            dp.generateTerrainMap();
+        }
+        if ( code == KeyEvent.VK_Y){
+            dp.generateRandomTerrainMap();
+        }
+        if ( code == KeyEvent.VK_S){
+            dp.generateSimpleRandomMaze();
         }
     }
     @Override

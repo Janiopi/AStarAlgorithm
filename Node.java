@@ -18,6 +18,9 @@ public class Node extends JButton implements ActionListener{
     boolean solid;
     boolean open;
     boolean checked;
+    
+    // Edit mode
+    private ActionListener editListener = null;
 
     public Node(int col, int row){
         this.col = col;
@@ -102,11 +105,22 @@ public class Node extends JButton implements ActionListener{
             open = false;
             checked = false;
         }
-    }   
+    }
+    
+    public void setEditMode(boolean enabled, ActionListener listener) {
+        if (this.editListener != null) {
+            removeActionListener(this.editListener);
+        }
+        
+        if (enabled && listener != null) {
+            this.editListener = listener;
+            addActionListener(listener);
+        }
+    }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // setBackground(Color.orange);
+        // El listener de edit mode se maneja por separado
     }
 }

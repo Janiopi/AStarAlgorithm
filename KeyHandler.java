@@ -1,5 +1,6 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.SwingUtilities;
 
 public class KeyHandler implements KeyListener {
     DemoPanel dp;
@@ -38,6 +39,13 @@ public class KeyHandler implements KeyListener {
         }
         if ( code == KeyEvent.VK_S){
             dp.generateSimpleRandomMaze();
+        }
+        if ( code == KeyEvent.VK_E){
+            // Abrir editor de escenarios
+            SwingUtilities.invokeLater(() -> {
+                java.awt.Frame frame = (java.awt.Frame) SwingUtilities.getWindowAncestor(dp);
+                dp.openScenarioEditor(frame);
+            });
         }
     }
     @Override

@@ -45,14 +45,14 @@ public class DemoPanel extends JPanel{
         initializeNodes();
 
         //Set start and goal nodes
-        setStartNode(5,2);
-        setGoalNode(10,5);
+        // setStartNode(5,2);
+        // setGoalNode(10,5);
 
         // Cargar escenario de ejemplo de Minecraft
         loadMinecraftExampleScenario();
 
         //Set cost on nodes
-        setCostOnNodes();
+        // setCostOnNodes();
         
         // Add start node to open list
         openList.add(startNode);
@@ -190,14 +190,17 @@ public class DemoPanel extends JPanel{
     }
     
     private void setCostOnNodes(){
-        int col = 0;
-        int row = 0;
-        while(col < maxCol && row < maxRow){
-            getCost(node[col][row]);
-            col++;
-            if(col == maxCol){
-                col = 0;
-                row++;
+        // Iterate over all nodes and set their heuristic/costs,
+        // but skip start/goal and impassable (SOLID) nodes.
+        for (int col = 0; col < maxCol; col++) {
+            for (int row = 0; row < maxRow; row++) {
+                Node n = node[col][row];
+                if (n == null) continue;
+                // Don't recalculate for start or goal
+                if (n == startNode || n == goalNode) continue;
+                // Skip walls / solid nodes
+                if (n.getTerrainType() == TerrainType.SOLID || n.solid) continue;
+                getCost(n);
             }
         }
     }
